@@ -4,15 +4,6 @@ SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
 cd $BASEDIR
 
-BIN=_bin
-BUILD=_build
-# valid files
-bash validfile.sh
-if [ $? -ne 0 ] 
-then
-    exit -1
-fi
-
 if [ ! -d ecs ] || [ ! -f readme.txt ]
 then
     echo "ERROR: $BASEDIR is not a valid directory of SDK-gcc for ecs."
@@ -29,11 +20,11 @@ then
     exit
 fi
 
-rm -fr ${BIN}
-mkdir $BIN
-rm -fr $BUILD
-mkdir $BUILD
-cd $BUILD
+rm -fr bin
+mkdir bin
+rm -fr build
+mkdir build
+cd build
 
 cmake ../ecs
 tmp=$?
@@ -53,3 +44,13 @@ echo "make <>return:" ${tmp}
  exit -1
 fi
 
+
+
+cd ..
+
+if [ -f ecs.tar.gz ]
+then
+    rm -f ecs.tar.gz
+fi
+
+tar -zcPf ecs.tar.gz *
