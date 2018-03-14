@@ -32,6 +32,17 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
      *@var TDList        tdlist      ÑµÁ·Êý¾Ý 
      */
     PMList pml = newPMList(data_num);
+#define temp "6\nflavor1 1\nflavor2 2\n flavor3 1\nflavor4 1\nflavor5 1"
+    strcpy(outs,temp);
+    outs+= strlen(temp);
+    PMList_createPM(pml); PMList_createPM(pml); PMList_createPM(pml); 
+    PMList_PMAddFlavor(pml,&vmlist->flavorFly[0],0);
+    PMList_PMAddFlavor(pml,&vmlist->flavorFly[1],0);
+    PMList_PMAddFlavor(pml,&vmlist->flavorFly[1],0);
+    PMList_PMAddFlavor(pml,&vmlist->flavorFly[2],1);
+    PMList_PMAddFlavor(pml,&vmlist->flavorFly[3],1);
+    PMList_PMAddFlavor(pml,&vmlist->flavorFly[4],2);
+    // output ref: 82 line
     // to do
     
     FlavorCollectList fcs = collectFlavorByDay(vmlist,tdlist);
