@@ -47,7 +47,10 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
     strcat(dateTmp," ");
     strcat(dateTmp, timeTmp);
     int trainEndDay = readTime(dateTmp) / (3600*24);
-    int numOfDaysToTrain = trainEndDay - trainStartDay;
+    int numOfDaysToTrain = trainEndDay - trainStartDay + 1;
+    printf("===========predict(average)==================\n");
+    printf("flavorType\tpredictNum\n");
+    vmlist->predictTotalNum = 0;
     FlavorList_foreach(fl,vmlist,i) {
         int idx = fl->idx;
         CollectNode pos; 
@@ -59,7 +62,9 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
             
         }
         double predictNum = (double)tmpSum / numOfDaysToTrain * numOfDaysToPredict;       
-        printf("idx:%d\tsum:%d\n", idx, (int)(predictNum+0.5));
+        fl->predictNum = (int)(predictNum+0.5);
+        vmlist->predictTotalNum += fl->predictNum;
+        printf("%s\t%d\n", fl->flavorType, fl->predictNum);
     }
 
     //========================================================
@@ -99,7 +104,15 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
 
 
 	// 需要输出的内容
-	char * result_file = (char *)"17\n\n0 8 0 20";
+	//char * result_file = (char *)"17\n\n0 8 0 20";
+    char result_file[50000];
+    char buffer[100];
+    sprintf(result_file, "%d\n", vmlist->predictTotalNum);
+    FlavorList_foreach(fl,vmlist,i) { 
+        sprintf(buffer, "%s %d\n", fl->flavorType, fl->predictNum);
+        strcat(result_file, buffer);
+     }
+    strcat(result_file, "\n");// 空行
 
 	// 直接调用输出文件的方法输出到指定文件中(ps请注意格式的正确性，如果有解，第一行只有一个数据；第二行为空；第三行开始才是具体的数据，数据之间用一个空格分隔开)
 	write_result(result_file, filename);

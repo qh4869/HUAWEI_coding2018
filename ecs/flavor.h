@@ -9,12 +9,14 @@ typedef struct _flavor_t {
     char flavorType[MAX_FLAVOR_NAME_LEN]; // 虚拟机规格
     int cpuNumber;
     int memSize;  // MB
+    int predictNum;// 预测个数
 } *Flavor;
 
 typedef struct _flavor_list_t {
     struct _flavor_t * flavorFly;
     int size;
     int capacity;
+    int predictTotalNum; //预测总数
 } *FlavorList;
 
 FlavorList newFlavorList(int capacity);
