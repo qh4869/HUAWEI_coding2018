@@ -22,13 +22,16 @@ int readFlavor(FlavorList list, char *info[])
 time_t readTime(char *str) 
 {
     struct tm  timep;
+    time_t diff;
     memset(&timep,0,sizeof(timep));
+    timep.tm_year=70; timep.tm_mday=1;
+    diff = mktime(&timep);
     sscanf(str,"%d-%d-%d %d:%d:%d\n",
             &timep.tm_year, &timep.tm_mon, &timep.tm_mday,
             &timep.tm_hour, &timep.tm_min, &timep.tm_sec);
     timep.tm_year -= 1900;
     timep.tm_mon -= 1;
-    return mktime(&timep);
+    return mktime(&timep) - diff;
 }
 
 int readTrainData(char *data[],int data_num, TDList dlist, FlavorList flist)
