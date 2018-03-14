@@ -18,6 +18,7 @@ void freeFlavorList(FlavorList l) { free(l); }
 int FlavorList_addType(FlavorList list, char *flavorType,int cpuNumber, int memSize)
 {
     int size = list->size;
+    list->flavorFly[size].idx = size;
     strcpy(list->flavorFly[size].flavorType,flavorType);
     list->flavorFly[size].cpuNumber = cpuNumber;
     list->flavorFly[size].memSize = memSize;

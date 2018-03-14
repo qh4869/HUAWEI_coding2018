@@ -4,6 +4,7 @@
 #define MAX_FLAVOR_NAME_LEN  (10+1)
 #define MAX_FLAVOR_ID_LEN  (36+1)
 typedef struct _flavor_t {
+    int idx;  // flavor id in this process
     // char flavorID[40];
     char flavorType[MAX_FLAVOR_NAME_LEN]; // 虚拟机规格
     int cpuNumber;
