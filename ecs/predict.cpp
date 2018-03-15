@@ -3,8 +3,9 @@
 #include <string.h>
 #include "input.h"
 #include "flavorCollect.h"
-#include "PMAlloc.h"
 
+FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, time_t endTime);
+PMList flavor_alloc_to_PM(FlavorIntST st, int totalNum);
 //你要完成的功能总入口
 void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int data_num, char * filename)
 {
@@ -21,7 +22,7 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
     TDList tdlist = newTDList(MAX_DATA_NUM);
     readTrainData(data, data_num, tdlist, vmlist);
 
-    PHYmachine pm = PM_getPM();
+    // PHYmachine pm = PM_getPM();
 	char * result_file = (char *)malloc(data_num*50);
     *result_file='\0'; char *outs = result_file;
     /**
@@ -30,55 +31,25 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
      *@var string       optType      优化类型 "CPU" or "MEM"
      *@var time_t startTime, endTime 要预测的时间开始和结束
      *@var TDList        tdlist      训练数据 
+     *@var char*         outs        输出字节流
      */
-    PMList pml = newPMList(data_num);
+
     // to do
+    FlavorIntST st_flavor_num = flavor_predict(vmlist, tdlist,startTime,endTime);
+    int totalNum = FlavorIntST_sumAll(st_flavor_num);
+    PMList pml = flavor_alloc_to_PM(st_flavor_num,totalNum);
     
-    FlavorCollectList fcs = collectFlavorByDay(vmlist,tdlist);
-
-
-    printf("========PHY Info===================\n");
-    printf("PHY: %d %dMB\n",pm->cpuNumber,pm->memSize);
-    printf("========Flavor Info===================\n");
-    int i;
-    Flavor fl;
-    FlavorList_foreach(fl,vmlist,i) {
-        printf("%s %d %d\n", fl->flavorType, fl->cpuNumber, fl->memSize);
-    }
-    double diff = difftime(endTime,startTime);
-    printf("startTime:%ld endTime:%ld diff:%f\n",
-            startTime, endTime, diff/3600/24);
-    printf("========training data===============\n");
-    printf("Frome %d to %d\n",tdlist->firstDay,tdlist->lastDay);
-    printf("flavor type\tcreateDay\tcreateTime\n");
-    TDItem item; 
-    TDList_foreach(item,tdlist,i) {
-        printf("%s\t%d\t%ld\n",
-                item->flavor->flavorType,
-                item->createDay,
-                item->createTime);
-    }
-
-    printf("========training data Collects===============\n");
-    FlavorList_foreach(fl,vmlist,i) {
-        int idx = fl->idx;
-        printf("Flavor Type:%s\n",fcs->collects[idx].flavor->flavorType);
-        CollectNode pos; 
-        struct list_head *ptr,*head = &(fcs->collects[idx].head);
-        for(ptr = head->next; ptr !=head; ptr = ptr->next) {
-            pos = container_of(ptr,collect_node_t, nodeptr);
-            printf("%d,%d\n",pos->key,pos->count);
-        }
-    }
-
 
 	// 需要输出的内容
-    PMList_sprintf(pml,outs);
-
-	// 直接调用输出文件的方法输出到指定文件中(ps请注意格式的正确性，如果有解，第一行只有一个数据；第二行为空；第三行开始才是具体的数据，数据之间用一个空格分隔开)
+    int chars;
+    chars = sprintf(outs,"%d\n",totalNum); outs += chars; 
+    chars = FlavorIntST_sprintf(st_flavor_num,outs); outs +=chars;
+    *outs = '\n'; outs++; // add null line
+    chars = PMList_sprintf(pml,outs); outs += chars;
 	write_result(result_file, filename);
+
+    // =============
+    free(pml); free(st_flavor_num);
     free(result_file);
-    free(fcs);
-    free(vmlist);
-    free(tdlist);
+    free(vmlist); free(tdlist);
 }

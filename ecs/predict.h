@@ -3,12 +3,16 @@
 
 #include <malloc.h>
 #include "lib_io.h"
-#include "flavor.h"
-#include "phymachine.h"
-#include "trainDataList.h"
 #define MAX_FLAVOR_TYPE 15
 
+#include "phymachine.h"
+#include "flavor.h"
+#include "trainDataList.h"
+#include "FlavorIntST.h"
+#include "PMAlloc.h"
+
 void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int data_num, char * filename);
+
 
 	
 

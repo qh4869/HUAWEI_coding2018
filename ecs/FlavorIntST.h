@@ -15,7 +15,7 @@ FlavorIntST newFlavorIntST();
 int FlavorIntST_put(FlavorIntST st,Flavor key, int value);
 int *FlavorIntST_get(FlavorList st, Flavor key);
 /***************************************************/
-int FlavorIntSt_sumAll(FlavorIntST st);
-int FlavorIntSt_sprintf(FlavorIntST st, char *outs);
+int FlavorIntST_sumAll(FlavorIntST st);
+int FlavorIntST_sprintf(FlavorIntST st, char *outs);
 #endif
 
