@@ -49,6 +49,7 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
     printf("startTime:%ld endTime:%ld diff:%f\n",
             startTime, endTime, diff/3600/24);
     printf("========training data===============\n");
+    printf("Frome %d to %d\n",tdlist->firstDay,tdlist->lastDay);
     printf("flavor type\tcreateDay\tcreateTime\n");
     TDItem item; 
     TDList_foreach(item,tdlist,i) {

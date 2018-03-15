@@ -34,11 +34,22 @@ time_t readTime(char *str)
     return mktime(&timep) - diff;
 }
 
+#define SECS_PER_DAY (60*60*24)
 int readTrainData(char *data[],int data_num, TDList dlist, FlavorList flist)
 {
     int line;
     char flavorID[100],flavorType[20],date[100],time[30]; 
     Flavor fl; time_t t;
+    // FirstDay
+   sscanf(data[0],"%s\t%s\t%s %s\n",flavorID,flavorType,date,time);
+   strcat(date," "); strcat(date,time);
+   t = readTime(date);
+   dlist->firstDay = t/SECS_PER_DAY;
+    // LastDay
+   sscanf(data[data_num-1],"%s\t%s\t%s %s\n",flavorID,flavorType,date,time);
+   strcat(date," "); strcat(date,time);
+   t = readTime(date);
+   dlist->lastDay = t/SECS_PER_DAY;
     for(line=0; line < data_num; line++){
        sscanf(data[line],"%s\t%s\t%s %s\n",flavorID,flavorType,date,time);
        fl = FlavorList_getFlavorByType(flist,flavorType);

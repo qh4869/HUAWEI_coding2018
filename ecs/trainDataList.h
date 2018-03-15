@@ -12,6 +12,8 @@ typedef struct _TrainDataItem {
 
 typedef struct _TrainDataList {
     TDItem list;
+    int firstDay;
+    int lastDay;
     int size;
     int capacity;
 } *TDList;

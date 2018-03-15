@@ -11,7 +11,7 @@ TDList newTDList(int capacity)
                                 +sizeof(struct _TrainDataList));
     p->list = (TDItem)(p+1);
     p->size = 0;
-    p->capacity = 0;
+    p->capacity = capacity;
     return p;
 }
 
