@@ -13,7 +13,7 @@ typedef struct _flavor_int_st_t{
 
 FlavorIntST newFlavorIntST();
 int FlavorIntST_put(FlavorIntST st,Flavor key, int value);
-int *FlavorIntST_get(FlavorList st, Flavor key);
+int *FlavorIntST_get(FlavorIntST st, Flavor key);
 /***************************************************/
 int FlavorIntST_sumAll(FlavorIntST st);
 int FlavorIntST_sprintf(FlavorIntST st, char *outs);

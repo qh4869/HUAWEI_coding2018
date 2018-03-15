@@ -36,11 +36,12 @@ int PMList_createPM(PMList pml)
 int PMList_PMAddFlavor(PMList pml, Flavor fl, int pm_idx)
 {
     //ASSERT(pm_idx < pml->size);
+    if(pm_idx >= pml->size) { return -1; }
     pm_alloc_info_t *pm;
     pm = pml->pms + pm_idx;
     int cpu = fl->cpuNumber,
         mem = fl->memSize;
-    if(pm->restCPU < cpu || pm->restMEM < mem) { return -1; } 
+    if(pm->restCPU < cpu || pm->restMEM < mem) { return -2; } 
 
     pm->restCPU -= cpu;
     pm->restMEM -= mem;
