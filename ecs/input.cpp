@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include "flavor.h"
-#include "trainDataList.h"
+#include "input.h"
 
 int readFlavor(FlavorList list, char *info[])
 {

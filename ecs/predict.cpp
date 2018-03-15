@@ -1,11 +1,7 @@
+#include "common.h"
 #include "predict.h"
-#include <stdio.h>
-#include <string.h>
 #include "input.h"
-#include "flavorCollect.h"
 
-FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, time_t endTime);
-PMList flavor_alloc_to_PM(FlavorIntST st, int totalNum);
 //你要完成的功能总入口
 void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int data_num, char * filename)
 {

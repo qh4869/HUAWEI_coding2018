@@ -1,7 +1,7 @@
 #ifndef __PMALLOC_H__
 #define __PMALLOC_H__
 
-#include "predict.h"
+#include "common.h"
 
 typedef struct {
     PHYmachine pm_info; // to add other

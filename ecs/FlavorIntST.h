@@ -1,6 +1,6 @@
 #ifndef __FLAVORINTST_H__
 #define __FLAVORINTST_H__
-#include "predict.h"
+#include "common.h"
 
 typedef struct _flavor_int_st_t{
     struct {
