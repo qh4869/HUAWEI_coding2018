@@ -1,10 +1,12 @@
 #include "common.h"
 #include "predict.h"
 
-PMList flavor_alloc_to_PM(FlavorIntST st, int totalNum)
+PMList flavor_alloc_to_PM(FlavorIntST st, OPTTYPE opt)
 {
+    int totalNum = FlavorIntST_sumAll(st);
     PMList pml = newPMList(totalNum);
     Flavor fl; int pm_id = 0;
+
     for(int i=0; i<st->_size; i++) {
         fl = st->_map[i].key;
         int num = st->_map[i].value;

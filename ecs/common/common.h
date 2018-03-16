@@ -7,6 +7,7 @@
 #include <time.h>
 
 #define MAX_FLAVOR_TYPE 15
+enum OPTTYPE { CPU, MEM };
 
 #include "phymachine.h"
 #include "flavor.h"

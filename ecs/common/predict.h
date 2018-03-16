@@ -7,7 +7,7 @@
 void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int data_num, char * filename);
 
 FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, time_t endTime);
-PMList flavor_alloc_to_PM(FlavorIntST st, int totalNum);
+PMList flavor_alloc_to_PM(FlavorIntST st, OPTTYPE opt);
 
 
 	

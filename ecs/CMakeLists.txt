@@ -24,11 +24,10 @@ SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall -std=c++11")
 # 并将名称保存到 DIR_LIB_SRCS 变量
 aux_source_directory(. DIR_SRCS)
 aux_source_directory(common DIR_COMMON)
-aux_source_directory(othersrc DIR_other)
+aux_source_directory(othersrc DIR_OTHER)
 
 
 include(CmakeConfig.txt)
 # 指定生成目标
-add_executable(ecs ${PROJECT_SOURCE_DIR}/Predict/${PREDICTFILE} ${PROJECT_SOURCE_DIR}/AllocPM/${ALLOCPMFILE} ${DIR_SRCS} ${DIR_COMMON})
-
+add_executable(ecs ${PROJECT_SOURCE_DIR}/Predict/${PREDICTFILE} ${PROJECT_SOURCE_DIR}/AllocPM/${ALLOCPMFILE}  ${DIR_SRCS} ${DIR_COMMON} ${DIR_OTHER}) 
 # vim: set ft=cmake:
