@@ -52,3 +52,11 @@ echo "make <>return:" ${tmp}
  exit -1
 fi
 
+TESTCASE=$1
+TESTCASE=${TESTCASE:=usecase1}
+
+
+../_bin/ecs ../testdata/${TESTCASE}/TrainData.txt ../testdata/${TESTCASE}/input.txt out.txt && \
+    echo ===================output file====================================== && \
+    cat out.txt
+
