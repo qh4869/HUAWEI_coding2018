@@ -15,11 +15,12 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
     startTime = readTime(info[line++]);
     endTime = readTime(info[line++]); 
     
-    TDList tdlist = newTDList(MAX_DATA_NUM);
+    TDList tdlist = newTDList(data_num);
     readTrainData(data, data_num, tdlist, vmlist);
 
     // PHYmachine pm = PM_getPM();
-	char * result_file = (char *)malloc(data_num*50);
+	char * result_file = (char *)malloc(data_num*500);
+    memset(result_file,0,data_num*500);
     *result_file='\0'; char *outs = result_file;
     /**
      *@var PHYmachine   pm           物理机信息
@@ -42,7 +43,7 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
     int chars;
     chars = sprintf(outs,"%d\n",totalNum); outs += chars; 
     chars = FlavorIntST_sprintf(st_flavor_num,outs); outs +=chars;
-    *outs = '\n'; outs++; // add null line
+    *outs = '\n'; outs++; *outs = '\0'; // add null line
     chars = PMList_sprintf(pml,outs); outs += chars;
 	write_result(result_file, filename);
 

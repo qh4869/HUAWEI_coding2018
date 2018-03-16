@@ -69,7 +69,7 @@ int PMList_sprintf(PMList pml, char *outs)
                    pm->vms[i].count);
            outs += chars;
        }
-       *outs = '\n'; outs++;
+        *outs = '\n'; outs++; *outs = '\0'; // nextLine
     }
     return outs - oldouts;
 }
