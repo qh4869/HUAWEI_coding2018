@@ -26,8 +26,25 @@ aux_source_directory(. DIR_SRCS)
 aux_source_directory(common DIR_COMMON)
 aux_source_directory(othersrc DIR_OTHER)
 
-
 include(CmakeConfig.txt)
+set(OurPredict ${PROJECT_SOURCE_DIR}/Predict/${PREDICTFILE})
+set(OurAllocPM ${PROJECT_SOURCE_DIR}/AllocPM/${ALLOCPMFILE})
+set(AllSrcFile ${DIR_SRCS} ${DIR_COMMON} ${DIR_OTHER} ${OurPredict} ${OurAllocPM})
 # 指定生成目标
-add_executable(ecs ${PROJECT_SOURCE_DIR}/Predict/${PREDICTFILE} ${PROJECT_SOURCE_DIR}/AllocPM/${ALLOCPMFILE}  ${DIR_SRCS} ${DIR_COMMON} ${DIR_OTHER}) 
+add_executable(ecs ${AllSrcFile}) 
+
+add_custom_target(mksubpackage
+            -rm -rf ${PROJECT_SOURCE_DIR}/../_package
+            COMMAND cp -r ${PROJECT_SOURCE_DIR}/../origin-sdk-gcc/ ${PROJECT_SOURCE_DIR}/../_package
+            COMMAND cp ${PROJECT_SOURCE_DIR}/common/* ${PROJECT_SOURCE_DIR}/../_package/ecs/
+            COMMAND cp ${PROJECT_SOURCE_DIR}/othersrc/* ${PROJECT_SOURCE_DIR}/../_package/ecs/
+            COMMAND cp ${OurPredict} ${PROJECT_SOURCE_DIR}/../_package/ecs/OurPredict.cpp 
+            COMMAND cp ${OurAllocPM} ${PROJECT_SOURCE_DIR}/../_package/ecs/OurAllocPM.cpp
+            COMMAND cp 
+                ${PROJECT_SOURCE_DIR}/../origin-sdk-gcc/ecs/CMakeLists.txt
+                ${PROJECT_SOURCE_DIR}/../origin-sdk-gcc/ecs/ecs.cpp
+                ${PROJECT_SOURCE_DIR}/../origin-sdk-gcc/ecs/io.cpp
+                ${PROJECT_SOURCE_DIR}/../_package/ecs/
+                COMMAND bash ${PROJECT_SOURCE_DIR}/../_package/build.sh
+)
 # vim: set ft=cmake:

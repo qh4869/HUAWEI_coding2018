@@ -6,8 +6,7 @@ cd $BASEDIR
 
 BIN=_bin
 BUILD=_build
-# valid files
-bash validfile.sh
+
 if [ $? -ne 0 ] 
 then
     exit -1
