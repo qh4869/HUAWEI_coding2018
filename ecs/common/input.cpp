@@ -41,11 +41,7 @@ int readTrainData(char *data[],int data_num, TDList dlist, FlavorList flist)
    strcat(date," "); strcat(date,time);
    t = readTime(date);
    dlist->firstDay = t/SECS_PER_DAY;
-    // LastDay
-   sscanf(data[data_num-1],"%s\t%s\t%s %s\n",flavorID,flavorType,date,time);
-   strcat(date," "); strcat(date,time);
-   t = readTime(date);
-   dlist->lastDay = t/SECS_PER_DAY;
+   dlist->lastDay = -1;
     for(line=0; line < data_num; line++){
        sscanf(data[line],"%s\t%s\t%s %s\n",flavorID,flavorType,date,time);
        fl = FlavorList_getFlavorByType(flist,flavorType);
