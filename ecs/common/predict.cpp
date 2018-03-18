@@ -17,6 +17,7 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
     
     TDList tdlist = newTDList(data_num);
     readTrainData(data, data_num, tdlist, vmlist);
+    tdlist->lastDay = startTime/3600/24-1;
 
     // PHYmachine pm = PM_getPM();
 	char * result_file = (char *)malloc(data_num*500);
@@ -36,14 +37,16 @@ void predict_server(char * info[MAX_INFO_NUM], char * data[MAX_DATA_NUM], int da
     if(0 == strcmp(optType,"CPU")) {opt=CPU;} else {opt=MEM;}
     FlavorIntST st_flavor_num = flavor_predict(vmlist, tdlist,startTime,endTime);
     int totalNum = FlavorIntST_sumAll(st_flavor_num);
-    PMList pml = flavor_alloc_to_PM(st_flavor_num,opt);
-    
-
-	// 需要输出的内容
+    // ===================输出预测虚拟机数量====================
     int chars;
     chars = sprintf(outs,"%d\n",totalNum); outs += chars; 
     chars = FlavorIntST_sprintf(st_flavor_num,outs); outs +=chars;
     *outs = '\n'; outs++; *outs = '\0'; // add null line
+
+    PMList pml = flavor_alloc_to_PM(st_flavor_num,opt);
+    
+
+	// 需要输出的内容
     chars = PMList_sprintf(pml,outs); outs += chars;
 	write_result(result_file, filename);
 
