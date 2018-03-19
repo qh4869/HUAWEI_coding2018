@@ -17,15 +17,18 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
 
     FlavorCollectList fcl =  collectFlavorByDay(vmlist, tdlist);
     
+    char filename[100];
     FlavorList_foreach(fl,vmlist, idx) {
+        sprintf(filename,"%s.txt",fl->flavorType);
+        FILE *fp = fopen(filename,"w+");
          int idx = fl->idx;
-         printf("Flavor Type:%s\n",fcl->collects[idx].flavor->flavorType);
          CollectNode pos;
          struct list_head *ptr,*head=&(fcl->collects[idx].head);
          for(ptr=head->next; ptr !=head ; ptr=ptr->next) {
              pos = container_of(ptr,collect_node_t,nodeptr);
-             printf("%d\t%d\n",pos->key,pos->count);
+             fprintf(fp,"%d\t%d\n",pos->key,pos->count);
          }
     }
+    free(fcl);
     return st;
 }

@@ -36,38 +36,38 @@ CollectNode FlavorCollectList_mallocNode(FlavorCollectList fc)
 
 FlavorCollectList collectFlavorByDay(FlavorList vmlist, TDList tdlist)
 { 
-    FlavorCollectList fcs = newFlavorCollectList(vmlist, tdlist->size);
-    int size = fcs->size;
-    int *prevDay = (int *)malloc(2*size*sizeof(int)),
-        *flCount = prevDay + size;
-    memset(prevDay,-1,size*sizeof(int));
+    int size = vmlist->size;
+    FlavorCollectList fcs = newFlavorCollectList(vmlist, size*(tdlist->lastDay - tdlist->firstDay + 1));
+
+    int *flCount = (int *)malloc(size*sizeof(int));
     memset(flCount,0,size*sizeof(int));
-    int i;
-    TDItem item;
-    CollectNode node; 
+
+    int curDay =tdlist->firstDay;
+    int prevDay = curDay;
+    TDItem item; int i;
+    CollectNode node;
+    Flavor fl; int i_fl;
+
     TDList_foreach(item,tdlist,i){
-        int idx = item->flavor->idx;
         int day = item->createDay;
-        if(-1 == prevDay[idx] || day == prevDay[idx]) {
+        int idx = item->flavor->idx;
+        if(day == prevDay) {
             flCount[idx]++;
-        }else{
-            node = FlavorCollectList_mallocNode(fcs);
-            node->key = prevDay[idx];
-            node->count = flCount[idx];
-            list_add_tail(&node->nodeptr, &fcs->collects[idx].head);
-            flCount[idx] = 1;
+        } else {
+            for(;curDay<day;curDay++) {
+                FlavorList_foreach(fl,vmlist,i_fl) {
+                    node = FlavorCollectList_mallocNode(fcs);
+                    node->key = curDay;
+                    node->count = flCount[i_fl];
+                    list_add_tail(&node->nodeptr, &fcs->collects[i_fl].head);
+                }
+                memset(flCount,0,size*sizeof(int));
+            }
+            flCount[idx]++;
+            prevDay = day;
         }
-        prevDay[idx] = day;
     }
-    Flavor fl;
-    FlavorList_foreach(fl,vmlist,i) {
-        int idx = fl->idx;
-        if(flCount[idx]==0) { continue; }
-        node = FlavorCollectList_mallocNode(fcs);
-        node->key = prevDay[idx];
-        node->count = flCount[idx];
-        list_add_tail(&node->nodeptr, &fcs->collects[idx].head);
-    }
+
     return fcs;
 }
 
