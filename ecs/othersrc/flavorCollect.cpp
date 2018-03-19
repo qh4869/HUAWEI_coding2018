@@ -67,6 +67,15 @@ FlavorCollectList collectFlavorByDay(FlavorList vmlist, TDList tdlist)
             prevDay = day;
         }
     }
+    for(;curDay<=tdlist->lastDay;curDay++) {
+        FlavorList_foreach(fl,vmlist,i_fl) {
+            node = FlavorCollectList_mallocNode(fcs);
+            node->key = curDay;
+            node->count = flCount[i_fl];
+            list_add_tail(&node->nodeptr, &fcs->collects[i_fl].head);
+        }
+        memset(flCount,0,size*sizeof(int));
+    }
 
     return fcs;
 }

@@ -1,6 +1,6 @@
 #这是注释
 
-set(PREDICTFILE tools_collectByDay.cpp)  # 预测函数所在的文件
+set(PREDICTFILE AR_predict.cpp)  # 预测函数所在的文件
 set(ALLOCPMFILE AllocPM_DEMO.cpp)  # 分配物理机函数所在文件
 
 # vim: set ft=cmake:
