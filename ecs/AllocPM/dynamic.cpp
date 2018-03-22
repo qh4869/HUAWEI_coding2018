@@ -69,7 +69,7 @@ int knapsack(const int *W1, const int *W2, const int *V, int *res,  const int n,
    // 释放内存
    for (int i = 0; i < n; i++)
    {
-       for (int j=0; j<C1; j++)
+       for (int j=0; j<C1+1; j++)
            delete[] f[i][j];
        //f[i] = 0;
    }
