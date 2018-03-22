@@ -53,7 +53,7 @@ echo "make <>return:" ${tmp}
 fi
 
 TESTCASE=$1
-TESTCASE=${TESTCASE:=usecase1}
+TESTCASE=${TESTCASE:=subAllData1}
 
 
 ../_bin/ecs ../testdata/${TESTCASE}/TrainData.txt ../testdata/${TESTCASE}/input.txt out.txt && \
