@@ -131,7 +131,10 @@ PMList flavor_alloc_to_PM(FlavorIntST st, OPTTYPE opt)
             {
                 W1[i+iAdd] = fl->cpuNumber;
                 W2[i+iAdd] = fl->memSize / 1024;
-                V[i+iAdd] = (fl->cpuNumber)*(fl->memSize/1024);//待优化
+                if (opt==CPU)
+                    V[i+iAdd] = (fl->cpuNumber);
+                else
+                    V[i+iAdd] = (fl->memSize/1024);
             }
             i = 0;
             iAdd += number;
