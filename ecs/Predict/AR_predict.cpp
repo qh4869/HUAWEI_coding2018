@@ -23,7 +23,7 @@ int autocorr(int *x,double *corr, int n)
 /*-----denoising卡方统计量--------*/
 void denoising_x2(int* num_vs_day, const int totalDay)
 {
-#define THREADHOLD_x2 200
+#define THREADHOLD_x2 150
     int totalNum = 0;
     double ave = 0;// average
     double x2[totalDay];// x^2
@@ -58,8 +58,8 @@ void qsort ( void * base, size_t num, size_t size, int ( * comparator ) ( const 
 /*-----denoising Local Outlier Factor(LOF)--------*/
 void denoising_LOF(int* num_vs_day, const int totalDay)
 {
-# define K 50
-# define THREADHOLD_LOF 15
+# define K 35
+# define THREADHOLD_LOF 18
     int diff[totalDay];
     int KDis[totalDay];// k-distance
     int rDist[totalDay][totalDay];// rechability distance
@@ -132,13 +132,14 @@ void denoising_LOF(int* num_vs_day, const int totalDay)
     {
         if (lof[i] > THREADHOLD_LOF) // 异常
             num_vs_day[i] = (int)(ave+0.5); // 填充平均值
+            // num_vs_day[i] = 0;
     } 
 }
 
 /*------------------------fft----------------------*/
 void denoising_fft(int* num_vs_day, const int totalDay)
 {
-# define CUT 50
+# define CUT 125
 # define FFTSIZE 256
     complex* fftData = (complex*)malloc(FFTSIZE*sizeof(complex));
     int2complex(num_vs_day, fftData, totalDay, FFTSIZE);
@@ -185,7 +186,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
          }
 
          // denoising_x2(num_vs_day, totalDay);// denoising
-         // denoising_LOF(num_vs_day, totalDay);
+         denoising_LOF(num_vs_day, totalDay);
          // denoising_fft(num_vs_day, totalDay);
 
          autocorr(num_vs_day,corr,totalDay);
