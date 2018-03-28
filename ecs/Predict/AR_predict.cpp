@@ -26,7 +26,7 @@ void denoising_x2(int* num_vs_day, const int totalDay)
 #define THREADHOLD_x2 200
     int totalNum = 0;
     double ave = 0;// average
-    double x2[totalDay] = {0};// x^2
+    double x2[totalDay];// x^2
     for (int i=0; i<totalDay; i++)
     {
         totalNum += num_vs_day[i];
@@ -60,12 +60,12 @@ void denoising_LOF(int* num_vs_day, const int totalDay)
 {
 # define K 50
 # define THREADHOLD_LOF 15
-    int diff[totalDay] = {0};
-    int KDis[totalDay] = {0};// k-distance
-    int rDist[totalDay][totalDay] = {0};// rechability distance
-    int neighbor[totalDay][totalDay] = {0};
-    double lrd[totalDay] = {0};// local rechability density
-    double lof[totalDay] = {0};// LOF value
+    int diff[totalDay];
+    int KDis[totalDay];// k-distance
+    int rDist[totalDay][totalDay];// rechability distance
+    int neighbor[totalDay][totalDay];
+    double lrd[totalDay];// local rechability density
+    double lof[totalDay];// LOF value
     int totalNum = 0;
     double ave = 0;// average
     for (int i=0; i<totalDay; i++)
@@ -184,9 +184,9 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
              num_vs_day[days++] = pos->count;
          }
 
-         //denoising_x2(num_vs_day, totalDay);// denoising
-         //denoising_LOF(num_vs_day, totalDay);
-         denoising_fft(num_vs_day, totalDay);
+         // denoising_x2(num_vs_day, totalDay);// denoising
+         // denoising_LOF(num_vs_day, totalDay);
+         // denoising_fft(num_vs_day, totalDay);
 
          autocorr(num_vs_day,corr,totalDay);
          double totalFlNum = 0;
