@@ -46,7 +46,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
 		}
 		//add random forest predict here
 		// input: totalDay, num_vs_day(p), preDays, 
-		double eachday[preDays] = {0};
+		double *eachday =(double *)malloc(preDays * sizeof(double));
 		for (int i = 0; i<preDays; i++) { 
 
 			eachday[i] = 0; }
