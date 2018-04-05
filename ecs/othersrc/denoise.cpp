@@ -35,7 +35,7 @@ void qsort ( void * base, size_t num, size_t size, int ( * comparator ) ( const 
 #define max(a,b) ((a)>(b)?(a):(b))
 
 /*-----denoising Local Outlier Factor(LOF)--------*/
-void denoising_LOF(int* num_vs_day, const int totalDay)
+void denoising_LOF(double* num_vs_day, const int totalDay)
 {
     double diff[totalDay];
     double KDis[totalDay];// k-distance
