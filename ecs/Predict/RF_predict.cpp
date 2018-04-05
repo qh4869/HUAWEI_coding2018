@@ -1,21 +1,9 @@
 #include "common.h"
 #include "predict.h"
 #include "flavorCollect.h"
+#include "denoise.h"
 
-int levinson(double *R, double *b, double *a, int len);
 double predict(double *num_vs_day, int totalDay, int preDays);
-int autocorr(int *x, double *corr, int n)
-{
-	for (int i = 0; i<n; i++) {
-		double sum = 0; int count = 0;
-		for (int j = 0; j + i<n; j++) {
-			sum += x[j] * x[j + i];
-			count++;
-		}
-		corr[i] = sum / count;
-	}
-	return n;
-}
 FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, time_t endTime)
 {
 	FlavorIntST st = newFlavorIntST();
@@ -34,8 +22,6 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
 	double *corr = (double *)malloc(corr_size * sizeof(double));
 	printf("%d\n", totalDay);
 
-#define ARORDER  17
-	//double *a = (double *)malloc(ARORDER * sizeof(double));
 	FlavorList_foreach(fl, vmlist, idx) {
 		CollectNode pos;
 		struct list_head *ptr, *head = &(fcl->collects[idx].head);
@@ -45,17 +31,11 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
 			pos = container_of(ptr, collect_node_t, nodeptr);
 			num_vs_day[days++] = pos->count;
 		}
-		//add random forest predict here
-		// input: totalDay, num_vs_day(p), preDays, 
-		/*double *eachday =(double *)malloc(preDays * sizeof(double));
-		for (int i = 0; i<preDays; i++) { 
+        // -----------denoising---------------
+        // denoising_x2(num_vs_day, totalDay);
+         denoising_LOF(num_vs_day, totalDay);
 
-			eachday[i] = 0; }
-
-		double totalFlNum = 0;
-		for (int day = 0; day < preDays; day++) {
-			totalFlNum += eachday[day];
-		}*/
+        // -----------predict----------------
         double totalFlNum = 0;
         totalFlNum = predict(num_vs_day,totalDay,preDays);
 		FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5));
