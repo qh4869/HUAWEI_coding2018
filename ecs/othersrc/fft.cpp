@@ -2,7 +2,7 @@
 #include "fft.h"  
 //精度0.0001弧度  
 
-int int2complex(const int* input, complex* output, int length, int fftsize)
+int double2complex(const double* input, complex* output, int length, int fftsize)
 {
   if (length > fftsize)
     return -1;
@@ -20,14 +20,14 @@ int int2complex(const int* input, complex* output, int length, int fftsize)
   return 0;
 }
 
-int complex2int(const complex* input, int* output, int length, int fftsize)
+int complex2double(const complex* input, double* output, int length, int fftsize)
 {
   if (length > fftsize)
     return -1;
 
   for (int i=0; i<length; i++)
   {
-    output[i] = (int)(input[i].real + 0.5);
+    output[i] = input[i].real;
   }
   return 0;
 }

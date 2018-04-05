@@ -3,14 +3,14 @@
   
 typedef struct complex //复数类型  
 {  
-  float real;       //实部  
-  float imag;       //虚部  
+  double real;       //实部  
+  double imag;       //虚部  
 }complex;  
   
 #define PI 3.1415926535897932384626433832795028841971  
  
-int int2complex(const int* input, complex* output, int length, int fftsize);
-int complex2int(const complex* input, int* output, int length, int fftsize);
+int double2complex(const double* input, complex* output, int length, int fftsize);
+int complex2double(const complex* input, double* output, int length, int fftsize);
   
 ///////////////////////////////////////////  
 void conjugate_complex(int n,complex in[],complex out[]);  

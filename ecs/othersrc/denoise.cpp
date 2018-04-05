@@ -114,10 +114,10 @@ void denoising_LOF(double* num_vs_day, const int totalDay)
 }
 
 /*------------------------fft----------------------*/
-void denoising_fft(int* num_vs_day, const int totalDay)
+void denoising_fft(double* num_vs_day, const int totalDay)
 {
     complex* fftData = (complex*)malloc(FFTSIZE*sizeof(complex));
-    int2complex(num_vs_day, fftData, totalDay, FFTSIZE);
+    double2complex(num_vs_day, fftData, totalDay, FFTSIZE);
     fft(FFTSIZE,fftData);
     for (int i=CUT; i<FFTSIZE-1-CUT; i++)
     {
@@ -125,7 +125,7 @@ void denoising_fft(int* num_vs_day, const int totalDay)
         fftData->imag = 0;
     }
     ifft(FFTSIZE,fftData);
-    complex2int(fftData, num_vs_day, totalDay, FFTSIZE);
+    complex2double(fftData, num_vs_day, totalDay, FFTSIZE);
 
     free(fftData);
 }

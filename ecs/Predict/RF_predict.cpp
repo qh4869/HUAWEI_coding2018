@@ -32,8 +32,9 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
 			num_vs_day[days++] = pos->count;
 		}
         // -----------denoising---------------
-        // denoising_x2(num_vs_day, totalDay);
+        //denoising_x2(num_vs_day, totalDay);
         //denoising_LOF(num_vs_day, totalDay);
+        denoising_fft(num_vs_day, totalDay);
 
         // -----------predict----------------
         double totalFlNum = 0;

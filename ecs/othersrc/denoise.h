@@ -12,12 +12,12 @@ void denoising_fft(double* num_vs_day, const int totalDay);
 
 // -----------parameter-------------
 // x2
-#define THREADHOLD_x2 150 
+#define THREADHOLD_x2 1470 
 // LOF
-# define K 35
-# define THREADHOLD_LOF 18
+# define K 30
+# define THREADHOLD_LOF 30
 // FFT
-# define CUT 125
+# define CUT 110
 # define FFTSIZE 256
 
 
