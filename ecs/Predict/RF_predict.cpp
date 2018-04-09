@@ -39,7 +39,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
         // -----------predict----------------
         double totalFlNum = 0;
         totalFlNum = predict(num_vs_day,totalDay,preDays);
-		FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5));
+		FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 1.25));
 	}
 
 	free(fcl);

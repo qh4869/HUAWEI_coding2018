@@ -100,8 +100,8 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	int xdim[2] = { N,col };
 	int nthsize = 5;//5 for regression 1 for classification
 	int nrnodes = 2 * (int)((float)floor((float)(sampsize / (1>(nthsize - 4) ? 1 : (nthsize - 4))))) + 1;
-	int nTree = 2000;//the default number of trees
-	const int NT = 2000;
+	const int NT = 1800;
+	int nTree = NT;//the default number of trees
 	int mtry = 2;
 	int imp[3] = { 1,0,3 };
 	int cat[10] = { 1,1,1,1,1,1,1,1,1,1 };
@@ -121,19 +121,18 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	double(*avnode)[NT] = (double(*)[NT])malloc(sizeof(double)* nrnodes * nTree);
 	double(*upper)[NT] = (double(*)[NT])malloc(sizeof(double)* nrnodes * nTree);
 
-	int(*lDaughter1)[NT] = (int(*)[NT])malloc(sizeof(int)* nrnodes * nTree);
+	int(*lDaughter)[NT] = (int(*)[NT])malloc(sizeof(int)* nrnodes * nTree);
 	int(*rDaughter)[NT] = (int(*)[NT])malloc(sizeof(int)* nrnodes * nTree);
 	int(*mbest)[NT] = (int(*)[NT])malloc(sizeof(int)* nrnodes * nTree);
 	int treeSize[NT], testdat = 0, nts = 1, labelts = 1, inbag;
 	char(*nodestatus)[NT] = (char(*)[NT])malloc(sizeof(char)* nrnodes * nTree);
 	/**/
-	intptr_t *p = (intptr_t *)&lDaughter1;
 	regRF(X_trn, Y_trn, xdim, &sampsize,
 		&nthsize, &nrnodes, &nTree, &mtry, imp,
 		cat, maxcat, &jprint, doProx, oobprox,
 		biasCorr, yptr, errimp, &impmat,
 		&impSD, &prox, treeSize, (char *)nodestatus,
-		(int*)lDaughter1, (int*)rDaughter, (double *)avnode, (int *)mbest,
+		(int*)lDaughter, (int*)rDaughter, (double *)avnode, (int *)mbest,
 		(double *)upper, mse, keepf, &replace,
 		testdat, &xts, &nts, &yts, labelts,
 		&yTestPred, &proxts, msets, coef,
@@ -151,7 +150,7 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	int *nodex; nodex = (int*)calloc(n_size, sizeof(int));
 	double ypred = 0;//Ô¤²âÒ»ÌìµÄ½á¹û ³õÊ¼»¯Îª0
 	regForest(X_tst, &ypred, &mdim, &n_size,
-		&nTree, (int*)lDaughter1, (int*)rDaughter,
+		&nTree, (int*)lDaughter, (int*)rDaughter,
 		(char *)nodestatus, &nrnodes, (double *)upper,
 		(double *)avnode, (int *)mbest, treeSize, cat,
 		maxcat, &keepPred, &allPred, doProx,
