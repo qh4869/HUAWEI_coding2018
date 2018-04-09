@@ -10,7 +10,7 @@ int *reperm(const int N)
 {
 	int *a = (int *)malloc(N * sizeof(int));
 	int temp, x;
-	//srand((unsigned)time(NULL));//重设随机种子
+	//srand((unsigned)time(NULL));//脰脴脡猫脣忙禄煤脰脰脳脫
 	for (int i = 0; i < N; i++)
 		a[i] = i;
 
@@ -31,7 +31,7 @@ int *reperm(const int N)
 double predict(double *num_vs_day, int totalDay, int preDays)
 {
 	double *eachday = (double *)malloc(preDays * sizeof(double));
-	const int col = 10;//取预测的前十天数据作为相关影响因素
+	const int col = 10;//脠隆脭陇虏芒碌脛脟掳脢庐脤矛脢媒戮脻脳梅脦陋脧脿鹿脴脫掳脧矛脪貌脣脴
 					   //const int N = totalDay - col;
 	const int N = totalDay - col;
 	double(*X)[col] = (double(*)[col])malloc(sizeof(double)* N * col);
@@ -40,7 +40,7 @@ double predict(double *num_vs_day, int totalDay, int preDays)
 	double *X_trn = (double *)malloc(sizeof(double) * N * col);
 	double *Y_trn = (double *)malloc(N * sizeof(double));
 	double *X_tst = (double *)malloc(col * sizeof(double));
-	double ypred = 0;//预测一天的结果 初始化为0
+	double ypred = 0;//脭陇虏芒脪禄脤矛碌脛陆谩鹿没 鲁玫脢录禄炉脦陋0
 	int index;
 	int *repermRow;
 
@@ -61,7 +61,7 @@ double predict(double *num_vs_day, int totalDay, int preDays)
 			X_temp[i][j] = X[index][j];
 		}
 	}
-	for (int i = 0; i < N; i++) { //等价于MATLAB中的转置
+	for (int i = 0; i < N; i++) { //碌脠录脹脫脷MATLAB脰脨碌脛脳陋脰脙
 		for (int j = 0; j < col; j++) {
 			X_trn[i*col + j] = X_temp[i][j];
 			//printf("%f	%d\n", X_trn[i*col + j], i*col + j);
@@ -100,9 +100,10 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	int xdim[2] = { N,col };
 	int nthsize = 5;//5 for regression 1 for classification
 	int nrnodes = 2 * (int)((float)floor((float)(sampsize / (1>(nthsize - 4) ? 1 : (nthsize - 4))))) + 1;
-	int nTree = 500;//the default number of trees
-	int mtry = 3;
-	int imp[3] = { 0,0,1 };
+	int nTree = 2000;//the default number of trees
+	const int NT = 2000;
+	int mtry = 2;
+	int imp[3] = { 1,0,3 };
 	int cat[10] = { 1,1,1,1,1,1,1,1,1,1 };
 	int maxcat = 1;
 	int jprint = 0;
@@ -112,19 +113,19 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	const int keepf[2] = { 1,0 };
 	int replace = 1;
 	//output parameters   yptr->ypred errimp->impout
-	double  impmat, impSD, prox, mse[500], xts, yts, yTestPred, proxts = 1, coef[2];
-	int *nout = (int *)malloc(N * 500 * sizeof(int));
+	double  impmat, impSD, prox, mse[NT], xts, yts, yTestPred, proxts = 1, coef[2];
+	int *nout = (int *)malloc(N * NT * sizeof(int));
 	double *yptr = (double *)malloc(N * sizeof(double));
 	double *errimp = (double *)malloc(col * sizeof(double));
-	double *msets = (double *)malloc(500 * sizeof(double));
-	double(*avnode)[500] = (double(*)[500])malloc(sizeof(double)* nrnodes * nTree);
-	double(*upper)[500] = (double(*)[500])malloc(sizeof(double)* nrnodes * nTree);
+	double *msets = (double *)malloc(NT * sizeof(double));
+	double(*avnode)[NT] = (double(*)[NT])malloc(sizeof(double)* nrnodes * nTree);
+	double(*upper)[NT] = (double(*)[NT])malloc(sizeof(double)* nrnodes * nTree);
 
-	int(*lDaughter1)[500] = (int(*)[500])malloc(sizeof(int)* nrnodes * nTree);
-	int(*rDaughter)[500] = (int(*)[500])malloc(sizeof(int)* nrnodes * nTree);
-	int(*mbest)[500] = (int(*)[500])malloc(sizeof(int)* nrnodes * nTree);
-	int treeSize[500], testdat = 0, nts = 1, labelts = 1, inbag;
-	char(*nodestatus)[500] = (char(*)[500])malloc(sizeof(char)* nrnodes * nTree);
+	int(*lDaughter1)[NT] = (int(*)[NT])malloc(sizeof(int)* nrnodes * nTree);
+	int(*rDaughter)[NT] = (int(*)[NT])malloc(sizeof(int)* nrnodes * nTree);
+	int(*mbest)[NT] = (int(*)[NT])malloc(sizeof(int)* nrnodes * nTree);
+	int treeSize[NT], testdat = 0, nts = 1, labelts = 1, inbag;
+	char(*nodestatus)[NT] = (char(*)[NT])malloc(sizeof(char)* nrnodes * nTree);
 	/**/
 	intptr_t *p = (intptr_t *)&lDaughter1;
 	regRF(X_trn, Y_trn, xdim, &sampsize,
@@ -148,7 +149,7 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	double proxMat = 0;
 	int nodes = 0;
 	int *nodex; nodex = (int*)calloc(n_size, sizeof(int));
-	double ypred = 0;//预测一天的结果 初始化为0
+	double ypred = 0;//脭陇虏芒脪禄脤矛碌脛陆谩鹿没 鲁玫脢录禄炉脦陋0
 	regForest(X_tst, &ypred, &mdim, &n_size,
 		&nTree, (int*)lDaughter1, (int*)rDaughter,
 		(char *)nodestatus, &nrnodes, (double *)upper,
