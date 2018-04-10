@@ -10,7 +10,7 @@ int *reperm(const int N)
 {
 	int *a = (int *)malloc(N * sizeof(int));
 	int temp, x;
-	//srand((unsigned)time(NULL));//ÖØÉèËæ»úÖÖ×Ó
+	//srand((unsigned)time(NULL));
 	for (int i = 0; i < N; i++)
 		a[i] = i;
 
@@ -26,27 +26,18 @@ int *reperm(const int N)
 
 	return a;
 }
-
-//predict function
-double predict(double *num_vs_day, int totalDay, int preDays)
+// data pretreatment for random forest training 
+int pretreatment(double *num_vs_day, int totalDay, int dayIndex, double **X_trn, double *Y_trn)
 {
-	double *eachday = (double *)malloc(preDays * sizeof(double));
-	const int col = 10;//È¡Ô¤²âµÄÇ°Ê®ÌìÊý¾Ý×÷ÎªÏà¹ØÓ°ÏìÒòËØ
-					   //const int N = totalDay - col;
-	const int N = totalDay - col;
-	double(*X)[col] = (double(*)[col])malloc(sizeof(double)* N * col);
+	const int col=10;
+    int N = totalDay - col - dayIndex;
+	int index = 0;
+	int *repermRow;
+    double(*X)[col] = (double(*)[col])malloc(sizeof(double)* N * col);
 	double *Y = (double *)malloc(N * sizeof(double));
 	double(*X_temp)[col] = (double(*)[col])malloc(sizeof(double) * N * col);
-	double *X_trn = (double *)malloc(sizeof(double) * N * col);
-	double *Y_trn = (double *)malloc(N * sizeof(double));
-	double *X_tst = (double *)malloc(col * sizeof(double));
-	double ypred = 0;//Ô¤²âÒ»ÌìµÄ½á¹û ³õÊ¼»¯Îª0
-	int index;
-	int *repermRow;
-
-
 	for (int i = 0; i < N; i++) {
-		Y[i] = num_vs_day[i + col];
+		Y[i] = num_vs_day[i + col + dayIndex];
 
 		for (int j = 0; j<col; j++) {
 			X[i][j] = num_vs_day[i + j];
@@ -56,39 +47,43 @@ double predict(double *num_vs_day, int totalDay, int preDays)
 	for (int i = 0; i < N; i++) {
 		index = repermRow[i];
 		Y_trn[i] = Y[index];
-		//printf("%f\n", Y_trn[i]);
+		
 		for (int j = 0; j < col; j++) {
 			X_temp[i][j] = X[index][j];
+			//printf("%f\n", X_temp[i][j]);
 		}
 	}
-	for (int i = 0; i < N; i++) { //µÈ¼ÛÓÚMATLABÖÐµÄ×ªÖÃ
-		for (int j = 0; j < col; j++) {
-			X_trn[i*col + j] = X_temp[i][j];
-			//printf("%f	%d\n", X_trn[i*col + j], i*col + j);
-		}
-	}
-
+	*X_trn = X_temp[0];
+	return N;
+}
+//predict function
+double predict(double *num_vs_day, int totalDay, int preDays)
+{
+	double *eachday = (double *)malloc(preDays * sizeof(double));
+	const int col = 10;//select recent 10 as predict influence factors
+	int N = totalDay - col;
+    double *X_trn ;//= (double *)malloc(sizeof(double) * N * col)
+	double *Y_trn = (double *)malloc(N * sizeof(double));
+	double *X_tst = (double *)malloc(col * sizeof(double));
+	double ypred = 0;
 
 	for (int i = 0; i < col; i++) {
 		X_tst[i] = num_vs_day[totalDay - col + i];
-		//printf("%f	", X_tst[i]);
 	}
 	extern int in_regTree; //// 0 -initialize and normal.  1-normal  , -99 release
 	extern int in_findBestSplit; // 0 -initialize and normal.  1-normal  , -99 release
+
 	for (int i = 0; i < preDays; i++) {
 		in_regTree = 0;
 		in_findBestSplit = 0;
+		N = pretreatment(num_vs_day, totalDay, i, &X_trn, Y_trn);
 		ypred = rfPredict(N, col, X_trn, Y_trn, X_tst);
-		for (int i = 0; i < col - 1; i++) {
-			X_tst[i] = X_tst[i + 1];
-		}
-		X_tst[col - 1] = ypred;
-
 		eachday[i] = ypred;
 	}
 
 	double totalFlNum = 0;
 	for (int day = 0; day < preDays; day++) {
+
 		totalFlNum += eachday[day];
 	}
 	return totalFlNum;
