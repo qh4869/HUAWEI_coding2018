@@ -27,9 +27,9 @@ int *reperm(const int N)
 	return a;
 }
 // data pretreatment for random forest training 
-int pretreatment(double *num_vs_day, int totalDay, int dayIndex, double **X_trn, double *Y_trn)
+int pretreatment(double *num_vs_day, int totalDay, int dayIndex,int colIn, double **X_trn, double *Y_trn)
 {
-	const int col=10;
+	const int col = colIn;
     int N = totalDay - col - dayIndex;
 	int index = 0;
 	int *repermRow;
@@ -76,17 +76,16 @@ double predict(double *num_vs_day, int totalDay, int preDays)
 	for (int i = 0; i < preDays; i++) {
 		in_regTree = 0;
 		in_findBestSplit = 0;
-		N = pretreatment(num_vs_day, totalDay, i, &X_trn, Y_trn);
+		N = pretreatment(num_vs_day, totalDay, i, col, &X_trn, Y_trn);
 		ypred = rfPredict(N, col, X_trn, Y_trn, X_tst);
 		eachday[i] = ypred;
 	}
 
 	double totalFlNum = 0;
 	for (int day = 0; day < preDays; day++) {
-
 		totalFlNum += eachday[day];
 	}
-	return totalFlNum;
+	return totalFlNum + 1.25;
 }
 
 double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
@@ -95,11 +94,11 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	int xdim[2] = { N,col };
 	int nthsize = 5;//5 for regression 1 for classification
 	int nrnodes = 2 * (int)((float)floor((float)(sampsize / (1>(nthsize - 4) ? 1 : (nthsize - 4))))) + 1;
-	const int NT = 1800;
+	const int NT = 1800;//1800
 	int nTree = NT;//the default number of trees
 	int mtry = 2;
 	int imp[3] = { 1,0,3 };
-	int cat[10] = { 1,1,1,1,1,1,1,1,1,1 };
+	//int cat[10] = { 1,1,1,1,1,1,1,1,1,1 };
 	int maxcat = 1;
 	int jprint = 0;
 	int doProx = 0;
@@ -110,6 +109,7 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	//output parameters   yptr->ypred errimp->impout
 	double  impmat, impSD, prox, mse[NT], xts, yts, yTestPred, proxts = 1, coef[2];
 	int *nout = (int *)malloc(N * NT * sizeof(int));
+	int *cat = (int *)malloc(col * sizeof(int));
 	double *yptr = (double *)malloc(N * sizeof(double));
 	double *errimp = (double *)malloc(col * sizeof(double));
 	double *msets = (double *)malloc(NT * sizeof(double));
@@ -122,6 +122,10 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	int treeSize[NT], testdat = 0, nts = 1, labelts = 1, inbag;
 	char(*nodestatus)[NT] = (char(*)[NT])malloc(sizeof(char)* nrnodes * nTree);
 	/**/
+	for (int i = 0; i < col; i++)
+	{
+		cat[i] = 1;
+	}
 	regRF(X_trn, Y_trn, xdim, &sampsize,
 		&nthsize, &nrnodes, &nTree, &mtry, imp,
 		cat, maxcat, &jprint, doProx, oobprox,
@@ -143,12 +147,13 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	double proxMat = 0;
 	int nodes = 0;
 	int *nodex; nodex = (int*)calloc(n_size, sizeof(int));
-	double ypred = 0;//Ô¤²âÒ»ÌìµÄ½á¹û ³õÊ¼»¯Îª0
+	double ypred = 0;//predict one day set initial data to 0
 	regForest(X_tst, &ypred, &mdim, &n_size,
 		&nTree, (int*)lDaughter, (int*)rDaughter,
 		(char *)nodestatus, &nrnodes, (double *)upper,
 		(double *)avnode, (int *)mbest, treeSize, cat,
 		maxcat, &keepPred, &allPred, doProx,
 		&proxMat, &nodes, nodex);
+	//ypred = coef[0] + coef[1] * ypred;
 	return ypred;
 }
