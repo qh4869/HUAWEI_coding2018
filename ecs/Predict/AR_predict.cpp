@@ -1,6 +1,7 @@
 #include "common.h"
 #include "predict.h"
 #include "flavorCollect.h"
+#include "denoise.h"
 
 int levinson(double *R, double *b, double *a, int len);
 int autocorr(int *x,double *corr, int n)
@@ -15,6 +16,8 @@ int autocorr(int *x,double *corr, int n)
     }
     return n;
 }
+
+
 FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, time_t endTime)
 {
     FlavorIntST st = newFlavorIntST();
@@ -44,6 +47,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
              pos = container_of(ptr,collect_node_t,nodeptr);
              num_vs_day[days++] = pos->count;
          }
+
          autocorr(num_vs_day,corr,totalDay);
          double totalFlNum = 0;
          for(int day = 1; day <=preDays; day++) {

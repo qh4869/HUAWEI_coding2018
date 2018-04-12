@@ -1,8 +1,11 @@
 #这是注释
 
 set(PREDICTFILE xgboost.cpp)  # 预测函数所在的文件
-#set(PREDICTFILE Predict_DEMO.cpp)  # 预测函数所在的文件
-set(ALLOCPMFILE AllocPM_DEMO.cpp)  # 分配物理机函数所在文件
+#set(ALLOCPMFILE AllocPM_DEMO.cpp)  # 分配物理机函数所在文件
+#set(PREDICTFILE Predict_DEMO.cpp)
+#set(PREDICTFILE RF_predict.cpp)  # 预测函数所在的文件
+#set(ALLOCPMFILE AllocPM_DEMO.cpp)  # 分配物理机函数所在文件
+set(ALLOCPMFILE dynamic.cpp)  # 分配物理机函数所在文件
 
 # vim: set ft=cmake:
 

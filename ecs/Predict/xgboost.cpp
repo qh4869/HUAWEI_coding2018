@@ -1,8 +1,9 @@
 #include "common.h"
 #include "predict.h"
 #include "flavorCollect.h"
+#include "denoise.h"
 
-int  xgboostlinear(int *inputy,int n, int m)
+double  xgboostlinear(double *inputy,int n, int m)
 {
     int *tx = (int *) malloc(sizeof(int)*n);
     double *ty = (double *) malloc(sizeof(double)*n);
@@ -34,7 +35,7 @@ int  xgboostlinear(int *inputy,int n, int m)
        sump += p; 
     }
     free(tx); free(ty); 
-    return (int)(sump+0.5);
+    return sump;
 }
 
 FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, time_t endTime)
@@ -50,7 +51,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
     int totalDay = tdlist->lastDay - tdlist->firstDay + 1;
     double preDays = difftime(endTime, startTime)/3600/24;
 
-    int *num_vs_day = (int *) malloc(totalDay*sizeof(int));
+    double *num_vs_day = (double *) malloc(totalDay*sizeof(double));
     int corr_size = totalDay < 40? 40:totalDay;
     double *corr = (double *) malloc(corr_size*sizeof(double));
     printf("%d\n",totalDay);
@@ -64,9 +65,15 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
              pos = container_of(ptr,collect_node_t,nodeptr);
              num_vs_day[days++] = pos->count;
          }
+
+         // -----------denoising---------------
+        //denoising_x2(num_vs_day, totalDay);
+        //denoising_LOF(num_vs_day, totalDay);
+        //denoising_fft(num_vs_day, totalDay);
+
          // num_vs_day 每天的个数, totalDay 总天数
          // preDays 要预测的天数
-         int totalFlNum = 0;
+         double totalFlNum = 0;
 
          totalFlNum = xgboostlinear(num_vs_day,totalDay,preDays);
 
