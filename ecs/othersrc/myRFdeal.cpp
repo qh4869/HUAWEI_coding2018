@@ -85,7 +85,7 @@ double predict(double *num_vs_day, int totalDay, int preDays)
 	for (int day = 0; day < preDays; day++) {
 		totalFlNum += eachday[day];
 	}
-	return totalFlNum + 1.25;
+	return totalFlNum;
 }
 
 double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
@@ -97,7 +97,7 @@ double rfPredict(int N, int col, double *X_trn, double *Y_trn, double *X_tst) {
 	const int NT = 1800;//1800
 	int nTree = NT;//the default number of trees
 	int mtry = 2;
-	int imp[3] = { 1,0,3 };
+	int imp[3] = { 1,0,3 };//1 0 3
 	//int cat[10] = { 1,1,1,1,1,1,1,1,1,1 };
 	int maxcat = 1;
 	int jprint = 0;
