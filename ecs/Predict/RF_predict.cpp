@@ -99,7 +99,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
         		break;
         	case 12:
 	        	totalFlNum = predict(num_vs_day,totalDay,preDays);
-		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 8.69));//1.8 0->2 no diff no this flavor
+		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 8.69));//8.69 1.8 0->2 no diff no this flavor
         		printf("no:%d\n",no);
         		break;
         	case 13:
