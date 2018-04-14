@@ -85,6 +85,8 @@ double predict(double *num_vs_day, int totalDay, int preDays)
 	for (int day = 0; day < preDays; day++) {
 		totalFlNum += eachday[day];
 	}
+	if (totalFlNum < 0)
+		totalFlNum = 0;
 	return totalFlNum;
 }
 

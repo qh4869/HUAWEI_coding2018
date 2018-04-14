@@ -40,7 +40,6 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
         int no = 0;
         double totalFlNum = 0;
 		sscanf(fl->flavorType, "flavor%d", &no);//get flavor number for different predict 
-        
         switch(no)
         {
         	case 1:
