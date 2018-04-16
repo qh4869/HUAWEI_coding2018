@@ -59,7 +59,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
         		break;
         	case 4:
         		totalFlNum = predict(num_vs_day,totalDay,preDays);
-		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 0));//2.8 2.8->1.8 same no this flavor
+		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 1.25));//0 2.8 2.8->1.8 same no this flavor
         		printf("no:%d\n",no);
         		break;
         	case 5:
@@ -89,7 +89,7 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
         		break;
         	case 10:
 	        	totalFlNum = predict(num_vs_day,totalDay,preDays);
-		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 0));//1.3 no this flavor
+		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 1.25));//1.3 no this flavor
         		printf("no:%d\n",no);
         		break;
         	case 11:
@@ -104,17 +104,17 @@ FlavorIntST flavor_predict(FlavorList vmlist, TDList tdlist, time_t startTime, t
         		break;
         	case 13:
 	        	totalFlNum = predict(num_vs_day,totalDay,preDays);
-		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 0));//1.6 1.3->1.6 no this flavor
+		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 1.25));//1.6 1.3->1.6 no this flavor
         		printf("no:%d\n",no);
         		break;
         	case 14:
         		totalFlNum = predict(num_vs_day,totalDay,preDays);
-		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 0));//2.7 1.7->2.7 no this flavor
+		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 1.25));//2.7 1.7->2.7 no this flavor
         		printf("no:%d\n",no);
         		break;
         	case 15:
 	        	totalFlNum = predict(num_vs_day,totalDay,preDays);
-		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 0));//1.9 1.9->10.9 no this flavor
+		    	FlavorIntST_put(st, fl, (int)(totalFlNum + 0.5 + 1.25));//1.9 1.9->10.9 no this flavor
         		printf("no:%d\n",no);
         		break;
         	default:
